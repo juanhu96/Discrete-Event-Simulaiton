@@ -1,0 +1,17 @@
+Warm Up Period finished
+
+Total number of Patients Entered the System: 1781
+Total number of Type I Patients Entered by the System: 1422
+Total number of Type II Patients Entered by the System: 359
+
+Total number of Patients Served by the System: 1677
+Total number of Type I Patients Served by the System: 1339
+Total number of Type II Patients Served by the System: 338
+
+Time Statistics:
+Total and Average Wait time in Queue: Total:   6719.947, Avg:      4.007 Minutes
+Total and Average Wait time in Queue (Type I): Total:   5397.521, Avg:      4.031 Minutes
+Total and Average Wait time in Queue (Type II): Total:   1322.426, Avg:      3.913 Minutes
+
+Current Wait List Length: 101
+Current Event List Length: 4

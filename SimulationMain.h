@@ -9,7 +9,7 @@
 #define EVENT_ENTRIES 10
 #define WAIT_ENTRIES 50000
 #define START_SIZE 100 // depends on the actual data
-#define TOTAL_SIM_TIME 10000 // total simulation time (hours)
+#define TOTAL_SIM_TIME 1000 // total simulation time (hours)
 
 
 // Event
@@ -24,42 +24,45 @@
 #define PROB_TYPE2 0.2 // the probability of type 2 patient
 
 // Surgeon
-#define NUM_SURGEON 3 // number of surgeon
+#define NUM_SURGEON 1 // number of surgeon
 
 
 // Structures & Rules
 #define FIFO 0
-#define NON_PREEMPTIVE 1
+#define FIFO_PRIORITY 1
 
 
 
-// Variables
-int total_num_patient_entered, total_num_patient_served, total_num_type1_pat_entered, total_num_type2_pat_entered,
-total_num_type1_pat_served, total_num_type2_pat_served, num_waitlist, num_waitlist_type1, num_waitlist_type2, num_surgeon_busy;
-double area_num_waitlist, area_server_status;
-double tnow;
-double time_last_event, total_of_delays, total_of_delays_type1, total_of_delays_type2;
-double total_sim_time;
+/* Global Variables */
+int num_surgeon_busy;
+int total_patient_entered[TYPE_OF_PAT+1], total_patient_served[TYPE_OF_PAT+1], num_waitlist[TYPE_OF_PAT+1];
 
-// Input
-double pat_arrival_rate = 2;
-double sur_completion_rate = 0.2;
+double total_of_delays[TYPE_OF_PAT+1];
+double tnow, time_last_event, total_sim_time, area_num_waitlist, area_server_status;
 
+/* Rates */
+double pat_arrival_rate = 1.6;
+double sur_completion_rate = 0.4;
 double pat_arrival_rate_type1 = pat_arrival_rate * PROB_TYPE1;
 double pat_arrival_rate_type2 = pat_arrival_rate * PROB_TYPE2;
+
+/* Seed */
 long int patient_seed, surgery_seed, patient_type_seed;
+
 int priority_set[] = {TYPE2};
 
-// Functions
+
+/* Functions */
 void initialize_vars(void);
 void initialize_postwarmup_vars(void);
 void get_next_event (int *etype, int *index);
 
 int select_event(void);
-int select_event_fifo(void);
-int select_event_nonpre_pri(void);
-bool priority(int);
+int find_next_patient(void);
+int find_next_patient_fifo(void);
+int find_next_patient_fifo_pri(void);
 
+bool higher_priority(struct patient, struct patient);
 void patient_arrival (int);
 void surgery_completion(int);
 
@@ -72,6 +75,7 @@ void generate_init_event(void);
 void generate_event(int etype, int);
 void insert_event(double, int, int);
 int get_urg_type(void);
+
 
 // Output functions
 void close_results_files(void);
@@ -88,7 +92,7 @@ typedef struct {
 } event;
 
 /* Patient */
-typedef struct {
+typedef struct patient{
     int urg_type;
     double arrival_time;
 } patient;
